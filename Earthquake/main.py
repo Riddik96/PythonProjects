@@ -20,18 +20,21 @@ map = "https://api.mapbox.com/styles/v1/mapbox/dark-v9/static/0,0,1.0,0,0/1024x5
 earthquake = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=csv"
 
 
+# retrieve earthquakes data from us database
 def earthquake_data(url):
     data = requests.get(url).content
     data = pd.read_csv(io.BytesIO(data), sep=",")
     return data
 
 
+# retrieve a world map from mapbox api
 def get_image(url):
     response = requests.get(url, stream=True).content
     img = CoreImage(io.BytesIO(response), ext="png")
     return img
 
 
+# convert coordiantes of earthquakes to web mercator
 def mercX(x):
     lon = math.radians(x)
     lon_a = (256 / pi) * math.pow(2, zoom)
@@ -41,28 +44,34 @@ def mercX(x):
 
 def mercY(y):
     lat = math.radians(y)
+    # using -256 for invert the y axis because kivy y axis is inverted
     lat_a = (-256 / pi) * math.pow(2, zoom)
     lat_b = math.tan(pi / 4 + lat / 2)
     lat_c = pi - math.log(lat_b)
     return lat_a * lat_c
 
 
+# draw the canvas
 class Canvas(BoxLayout):
     def __init__(self, **kwargs):
         super(Canvas, self).__init__(**kwargs)
         img = get_image(map)
         with self.canvas:
+            # translate the center of canvas from bottom left corner to the center
             Translate(1024 / 2, 512 / 2)
             Rectangle(texture=img.texture, pos=(-1024 / 2, -512 / 2), size=(1024, 512))
-            # Line(ellipse=(0 - 75, 0 - 75, 150, 150))
             data = earthquake_data(earthquake)
+            # create web mercators for the center of the map
             cx = mercX(0)
             cy = mercY(0)
+            # loop trough the earthquakes data for drawing them on the map
             for i in range(0, len(data)):
                 x = mercX(data["longitude"][i]) - cx
                 y = mercY(data["latitude"][i]) - cy
                 mag = data["mag"][i]
-                print(x, y, mag)
+                # mag squared for better differentiation of the radius of circles on the map
+                mag = math.pow(mag, 2)
+                # drawing the circles rapresentating the earthquakes using the magnitude for the radius and for translate the origin of the circle from bottom left to center
                 Line(ellipse=(x - mag / 2, y - mag / 2, mag, mag))
 
 
