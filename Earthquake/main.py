@@ -16,7 +16,8 @@ Config.set('graphics', 'height', '512')
 zoom = 1
 pi = math.pi
 ssl._create_default_https_context = ssl._create_unverified_context
-map = "https://api.mapbox.com/styles/v1/mapbox/dark-v9/static/0,0,1.0,0,0/1024x512?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NDg1bDA1cjYzM280NHJ5NzlvNDMifQ.d6e-nNyBDtmQCVwVNivz7A#2/0.0/0.0/1/0/0.png?access_token=pk.eyJ1IjoicmlkZGlrOTYiLCJhIjoiY2ptejFmZWptM3d2NTNwbngyOGhpM2hpMSJ9.VBaWAglI_v22OxL59SbLXA"
+map = "https://api.mapbox.com/styles/v1/mapbox/dark-v9/static/0,0," + str(
+    zoom) + ".0,0,0/1024x512?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NDg1bDA1cjYzM280NHJ5NzlvNDMifQ.d6e-nNyBDtmQCVwVNivz7A#2/0.0/0.0/1/0/0.png?access_token=pk.eyJ1IjoicmlkZGlrOTYiLCJhIjoiY2ptejFmZWptM3d2NTNwbngyOGhpM2hpMSJ9.VBaWAglI_v22OxL59SbLXA"
 earthquake = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=csv"
 
 
