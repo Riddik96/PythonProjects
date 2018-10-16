@@ -18,6 +18,7 @@ cy = 0
 ang = 0
 Config.set('graphics', 'width', w)
 Config.set('graphics', 'height', h)
+Config.set('graphics', 'resizable', False)
 zoom = 1
 pi = math.pi
 ssl._create_default_https_context = ssl._create_unverified_context
